@@ -24,7 +24,7 @@ function splitter(){
 		if [ "$currentN" -eq 1 ]; then
 			filename=$foldername/vocab_cs
 			touch $filename
-			echo "$gram $freq" | sort -o $filename -m - $filename
+			echo "$gram $freq" | sort -k2 -r -n -o $filename -m - $filename
 		else
 			filename=$foldername/$currentN$gmgz
 			touch $filename
