@@ -9,7 +9,7 @@ function displayHelp(){
 
 
 gms=gms
-gmgz=gm.gz
+gmgz=gm-0001.gz
 gm=gm
 
 function splitter(){
@@ -21,7 +21,7 @@ function splitter(){
 		foldername=$outputdir/$year/$currentN$gms
 		mkdir -p $foldername
 		if [ "$currentN" -eq 1 ]; then
-			filename=$foldername/$currentN$gm
+			filename=$foldername/vocab_cs
 			touch $filename
 			echo "$gram $freq" | sort -o $filename -m - $filename
 		else
@@ -34,7 +34,7 @@ function splitter(){
 }
 
 function zipOneGrams(){
-	fileConst=1gms/1gm
+	fileConst=1gms/vocab_cs
 	for d in $outputdir/*/; do
 		gzip $d$fileConst
 	done
