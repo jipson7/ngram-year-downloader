@@ -16,7 +16,8 @@ function splitter(){
 	while read data; do
 		splitLine=( $data )
 		year=${splitLine[$currentN]}
-		gram=("${splitLine[@]:0:$currentN}")
+		gramSplit=("${splitLine[@]:0:$currentN}")
+		gram="${gramSplit[@]}"
 		freq=${splitLine[$(($currentN + 1))]}
 		foldername=$outputdir/$year/$currentN$gms
 		mkdir -p $foldername
