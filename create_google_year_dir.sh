@@ -10,6 +10,7 @@ function displayHelp(){
 
 gms=gms
 gmgz=gm.gz
+gm=gm
 
 function splitter(){
 	while read data; do
@@ -19,10 +20,25 @@ function splitter(){
 		freq=${splitLine[$(($currentN + 1))]}
 		foldername=$outputdir/$year/$currentN$gms
 		mkdir -p $foldername
-		filename=$foldername/$currentN$gmgz
-		echo "$gram $freq" | gzip >> $filename
+		if [ "$currentN" -eq 1 ]; then
+			filename=$foldername/$currentN$gm
+			touch $filename
+			echo "$gram $freq" | sort -o $filename -m - $filename
+		else
+			filename=$foldername/$currentN$gmgz
+			touch $filename
+			echo "$gram $freq" | gzip >> $filename
+		fi
+
 	done
-	}
+}
+
+function zipOneGrams(){
+	fileConst=1gms/1gm
+	for d in $outputdir/*/; do
+		gzip $d$fileConst
+	done
+}
 
 function execute(){
 	source py3env/bin/activate
@@ -31,6 +47,9 @@ function execute(){
 		currentN=$i
 		echo "Downloading $currentN - grams"
 		google-ngram-downloader readline -l $language -n $i | splitter
+		if [ "$currentN" -eq 1 ]; then
+			zipOneGrams
+		fi
 	done
 
 }
