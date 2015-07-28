@@ -24,7 +24,7 @@ function splitter(){
 		if [ "$currentN" -eq 1 ]; then
 			filename=$foldername/vocab_cs
 			touch $filename
-			echo "$gram $freq" | sort -k2 -r -n -o $filename -m - $filename
+			echo "$gram $freq" >> $filename
 		else
 			filename=$foldername/$currentN$gmgz
 			touch $filename
@@ -37,12 +37,14 @@ function splitter(){
 function zipOneGrams(){
 	fileConst=1gms/vocab_cs
 	for d in $outputdir/*/; do
-		gzip $d$fileConst
+        $filename = $d$fileConst
+        sort -k2 -r -n -o $filename $filename
+		gzip $filename
 	done
 }
 
 function execute(){
-	source py3env/bin/activate
+	source env/bin/activate
 
 	for i in {1..5}; do
 		currentN=$i
