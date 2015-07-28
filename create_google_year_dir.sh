@@ -3,7 +3,7 @@
 function displayHelp(){
 
 	echo "Proper usage is: "
-	echo "	./create_google_year_dir <output-dir> "
+	echo "	./create_google_year_dir <output-dir> <input-dir>"
 	exit 0
 }
 
@@ -48,8 +48,11 @@ function execute(){
 
 	for i in {1..5}; do
 		currentN=$i
-		echo "Downloading $currentN - grams"
-		google-ngram-downloader readline -l $language -n $i | splitter
+		echo "Splitting $currentN - grams"
+        dirname=$inputdir/$i$gms 
+        for f in $dirname/*.gz; do
+            zcat $f | splitter
+        done
 		if [ "$currentN" -eq 1 ]; then
 			zipOneGrams
 		fi
@@ -58,14 +61,18 @@ function execute(){
 }
 
 
-if [ -z "$1" ]; then
+if [ -z "$1" ] && [ -z "$2" ]; then
 	displayHelp
 fi
 
 outputdir=$1
-language='eng-us'
+inputdir=$2
 currentN=1
 
+if [ ! -d "$inputdir" ]; then
+    echo "Input directory does not exist."
+    exit 0
+fi
 
 if [ ! -d "$outputdir" ]; then
     echo "Output directory does not exist."
